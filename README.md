@@ -1,4 +1,4 @@
 wp-github-updater
 =================
 
-Wordpress MU Plugin - Script to pull updates of Wordpress (MU) Plugins using the GitHub API
+Wordpress GitHub Updater - Script to pull updates of Wordpress (MU-)Plugins using the GitHub API
