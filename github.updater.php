@@ -319,7 +319,7 @@ class GitHubUpdater {
 
 			if ($this->destination_path === WPMU_PLUGIN_DIR) {
 				// If the folder is the MU-Plugin folder create an include file in the mu-plugin folder
-				$this->create_linker_file($this->destination_path.$new_path, $plugin_file);
+				$this->create_linker_file($this->destination_path.$new_path, $plugin_file, $plugin_data);
 
 				$github_active[$repo_data] = 1;
 				update_option('github_active_plugins', $github_active);
@@ -606,9 +606,26 @@ class GitHubUpdater {
 	 * @param string $plugin_path Path where the plugin main file can be found. Used to name the include function
 	 * @param string $plugin_file File name of the plugin main file
 	 */
-	private function create_linker_file($plugin_path, $plugin_file) {
+	private function create_linker_file($plugin_path, $plugin_file, $plugin_info = null) {
 		$linker = fopen($plugin_path.'.php', 'w+');
-		fwrite($linker, "<?php include_once('".$plugin_path."/".$plugin_file."'); ?>");
+		$real_dir = str_replace(WPMU_PLUGIN_DIR, '', $plugin_path);
+
+		$header = '';
+		if (!empty($plugin_info)) {
+			$header = "
+/**
+ * ".$plugin_file." - Linker-File
+ *
+ * Plugin Name: ".$plugin_info['Name']."
+ * Plugin URI:  ".$plugin_info['PluginURI']."
+ * Description: ".$plugin_info['Description']."
+ * Version:     ".$plugin_info['Version']."
+ * Author:      ".$plugin_info['Author']."
+ * Author URI:  ".$plugin_info['AuthorURI']."
+ */";
+		}
+
+		fwrite($linker, "<?php".$header."\ninclude_once(WPMU_PLUGIN_DIR.'".$real_dir."/".$plugin_file."');\n?>");
 
 		fclose($linker);
 	}
