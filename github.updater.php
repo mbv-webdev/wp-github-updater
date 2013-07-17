@@ -12,7 +12,7 @@
 * Plugin Name: GitHub Updater
 * Plugin URI: http://www.mbv-media.com/WP-Plugins/
 * Description: 
-* Version: 0.8.15
+* Version: 0.8.17
 * Author: MBV Media | Oliver Gärtner
 * Author URI: http://www.mbv-media.com/
 * License: GPL-3.0+
