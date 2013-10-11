@@ -483,7 +483,7 @@ class GitHubUpdater {
 		// When file is returned extract filename from the header information
 		preg_match('/filename=([^\n]+)/', $header_info, $file_name);
 		$this->file_name = trim(array_pop($file_name));
-
+		
 		$file = fopen($temp_directory.$this->file_name, "w+");
 
 		if ($file === false) {
@@ -542,6 +542,17 @@ class GitHubUpdater {
 			$upload_dir = wp_upload_dir();
 			// Files will be saved to the uploads directory, into the sub-directory /temp
 			$temp_directory = $upload_dir['basedir'].'/temp/';
+			
+			// Create temp_directory folder if it does not yet exist
+			if (!file_exists($temp_directory)) {
+				mkdir($temp_directory);
+			}
+			
+			if (!file_exists($temp_directory)) {
+				// Stop executing function if there's no file name or it failed to create the folder
+				exit(__('Unable to download MU Plugin: No temp directory', 'mbv-newsletter'));
+				return;
+			}
 
 			if ($this->save_file_data($shell, $temp_directory)) {
 				if (file_exists($temp_directory.$this->file_name)) {
